@@ -12,15 +12,15 @@
 # 作者：耿鸿飞
 ###################################################################
 phpini=/usr/local/php/etc/php.ini  
-tomail="genghongfei@teddymobile.cn jinjian@teddymobile.cn " #邮件接受者
+tomail="eoe2005@qq.com " #邮件接受者
 if [ $# -gt 0 ]
 then
 	phpini=$1
 fi
-isSetMail=$(cat /etc/mail.rc | grep 'set from=genghongfei@teddymobile.cn smtp=smtp.exmail.qq.com smtp-auth-user=genghongfei@teddymobile.cn smtp-auth-password=ghf1983 smtp-auth=login' | wc -l)
+isSetMail=$(cat /etc/mail.rc | grep 'set from=from@ smtp=smtp.exmail.qq.com smtp-auth-user=#from smtp-auth-password=pwd smtp-auth=login' | wc -l)
 if [ "$isSetMail" = "0" ]
 then
-	echo "set from=genghongfei@teddymobile.cn smtp=smtp.exmail.qq.com smtp-auth-user=genghongfei@teddymobile.cn smtp-auth-password=ghf1983 smtp-auth=login" >> /etc/mail.rc
+	echo "set from=from@ smtp=smtp.exmail.qq.com smtp-auth-user=from@ smtp-auth-password=pwd smtp-auth=login" >> /etc/mail.rc
 fi
 if [ -e $phpini ]
 then
