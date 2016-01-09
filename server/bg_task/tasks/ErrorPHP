@@ -12,7 +12,7 @@
 # 作者：耿鸿飞
 ###################################################################
 phpini=/usr/local/php/etc/php.ini  
-tomail="eoe2005@qq.com " #邮件接受者
+tomail="tomail " #邮件接受者
 if [ $# -gt 0 ]
 then
 	phpini=$1
