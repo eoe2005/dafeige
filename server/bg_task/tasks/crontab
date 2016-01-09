@@ -1,0 +1,57 @@
+#!/bin/sh
+#	作者：耿鸿飞 15911185633
+#	针对Crontab的配置管理
+###########################
+function canRun(){
+	return 1
+	conf=$1
+	tf=$(basename $conf)
+	tf="/tmp/${tf}.time"
+	fs=$(stat $conf | grep "Modify:")
+	fs=${fs/Modify: /}
+	ft=$(date -d "$fs" +"%s")
+	if [ -e $tf ]
+	then
+		f2=$(stat $tf | grep "Modify:")
+		f2=${f2/Modify: /}
+		f3=$(date -d "$f2" +"%s")
+		if [ $f3 -gt $ft ]
+		then
+			return 0
+		else
+			echo "" > $tf
+			return 1
+		fi
+	else
+		echo "" > $tf
+		return 1
+	fi
+}
+dir=$(realpath "$(dirname $0)/../crontab/")
+name=$(hostname)
+conf="${dir}/${name}.conf"
+app=${dir}/${name}
+if [ -e $conf ]
+then
+	canRun $conf
+	if [ $? -eq 1 ]
+	then
+		fn="temp$(date +'%s').conf"
+		cat $conf | while read line
+		do
+			if [ -n "$line" ]
+			then
+				line="${line/\{\$appdir\}/$app}"
+				run=$(echo "$line" | awk '{print $6}')
+				if [ -n $run ] && [ -x $run ]
+				then
+					echo "$line" >> $fn
+				fi
+			fi
+			
+		done
+		crontab $fn	
+		rm -f $fn
+	fi
+fi
+

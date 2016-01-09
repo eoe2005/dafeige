@@ -1,0 +1,6 @@
+#!/bin/sh
+for dirname in $@
+do
+	cd $dirname
+	git pull
+done

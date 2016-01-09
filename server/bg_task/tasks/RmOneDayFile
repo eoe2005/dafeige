@@ -1,0 +1,42 @@
+#!/bin/sh
+# 功能：
+#	删除传入的参数列表目录中超过一天没有更新的文件
+# 作者：耿鸿飞 15911185633 
+#################################
+function rmfile(){ 
+	f=$1
+	if [ -d $f ]
+	then
+		dsize=$( echo $(du -sh $f) | awk '{print $1}')
+		if [ "$dsize" = "4.0K" ] # 目录是空的，删掉
+		then
+			rm -Rf $f
+		else
+			for name in $f/*
+			do
+				if [ $f != $name ] && [ $name != "*" ]
+				then
+					rmfile $name  #递归的删除文件
+				fi
+			done
+		fi
+	else
+		if [ $f != "*" ] && [ -e $f ]
+		then
+			fs=$(stat $f | grep "Modify:")
+			fs=${fs/Modify: /}
+			nt=$(date +"%s")
+			ft=$(date -d "$fs" +"%s")
+			subtime=$(($nt - $ft))
+			if [ $subtime -gt 86400 ]  #文件最后修改时间超过了一天，删除掉
+			then
+				rm -f $f
+				#echo $f $subtime
+			fi
+		fi
+	fi
+}
+for dir in $@
+do
+	rmfile $dir
+done

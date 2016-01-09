@@ -1,0 +1,50 @@
+#!/bin/sh
+# 改程序主要是实现针对服务器上php的错误日志的检测
+# 程序主要逻辑
+#	1:检查参数，没有传递参数的话给一个默认的php。ini的路径
+#	2：检测mail的配置，没有配置的话做mail的smtp配置
+#   3：查找php的错误日志位置
+#   4：查看php是否有错误日志
+#	5：获取机器的名字和ip
+#	6：法搜php的错误日志
+#	7：删除PHP错误日志文件
+#
+# 作者：耿鸿飞
+###################################################################
+phpini=/usr/local/php/etc/php.ini  
+tomail="genghongfei@teddymobile.cn jinjian@teddymobile.cn " #邮件接受者
+if [ $# -gt 0 ]
+then
+	phpini=$1
+fi
+isSetMail=$(cat /etc/mail.rc | grep 'set from=genghongfei@teddymobile.cn smtp=smtp.exmail.qq.com smtp-auth-user=genghongfei@teddymobile.cn smtp-auth-password=ghf1983 smtp-auth=login' | wc -l)
+if [ "$isSetMail" = "0" ]
+then
+	echo "set from=genghongfei@teddymobile.cn smtp=smtp.exmail.qq.com smtp-auth-user=genghongfei@teddymobile.cn smtp-auth-password=ghf1983 smtp-auth=login" >> /etc/mail.rc
+fi
+if [ -e $phpini ]
+then
+	logset=$(grep 'error_log' $phpini | grep -v ';')
+	if [ -e $logset ]
+	then
+		echo "Null"
+	else
+		logset==${logset/error_log/}
+		logset=${logset//=/}
+		if [ -e $logset ] && [ -s $logset ]
+		then
+			ips=$(ifconfig | grep 'inet ' | awk '{print $2}' | while read line ;do if [ $line != '127.0.0.1' ] ; then printf "%s," $line; fi done)
+			hname=$(hostname)
+			subject="SERVER:  ${hname}(${ips}) PHP Error Log"
+			fsize=$(stat -c "%s" $logset)
+			if [ $fsize -gt 500000 ]
+			then
+				tail -1000 $logset | mail -s "$subject" $tomail
+			else
+				mail -s "$subject" $tomail < $logset
+			fi
+			rm -f $logset
+		fi
+	fi
+fi
+
