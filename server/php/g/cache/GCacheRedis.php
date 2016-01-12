@@ -5,9 +5,12 @@ namespace g\cache;
  */
 class GCacheRedis implements g\cache\GCacheInterface {
     protected $redis;
-    public function __construct($host,$db = 0) {
+    public function __construct($host,$db = 0,$auth = null) {
         $this->redis = new \Redis();
         call_user_func_array([$this->redis,'pconnect'], $host);
+        if($auth){
+            $this->redis->auth($auth);
+        }
         $this->redis->select($db);
     }
 
