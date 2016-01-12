@@ -4,7 +4,7 @@ namespace g\db;
  * @author eoe2005@qq.com
  * 
  */
-class Gdb {
+class GDnPdo {
     protected static $_pdos = [];
     /**
      *
