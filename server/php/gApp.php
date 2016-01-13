@@ -1,21 +1,27 @@
 <?php
+
 /**
- *	@author：耿鸿飞<eoe2005@qq.com>
- *	@date: 2016/1/11
- *	@Descript: 自动加载相关的数据
+ * 	@author：耿鸿飞<eoe2005@qq.com>
+ * 	@date: 2016/1/11
+ * 	@Descript: 自动加载相关的数据
  */
-define('DS',DIRECTORY_SEPARATOR);
-define("G_DIR",realpath(dirname(__FILE__)).DS);
+define('DS', DIRECTORY_SEPARATOR);
+define("G_DIR", realpath(dirname(__FILE__)) . DS);
 
 /**
  * 自动加载的类
- **/
-function gautoloadclass($cls){
-	$cls = preg_replace("/\\\/",DS,$cls);
-	$file = G_DIR.$cls.'.php';
-	if(file_exists($file)){
-		include $file;
-	}
+ * */
+function gautoloadclass($cls) {
+    if ($cls == 'GLog') {
+        include G_DIR.'g'.DS.'log'.DS.'GLog.php';
+    } else {
+        $cls = preg_replace("/\\\/", DS, $cls);
+        $file = G_DIR . $cls . '.php';
+        if (file_exists($file)) {
+            include $file;
+        }
+    }
 }
+
 spl_autoload_register('gautoloadclass');
 
