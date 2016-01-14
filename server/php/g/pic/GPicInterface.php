@@ -12,11 +12,11 @@ interface GPicInterface {
     const POSITION_TOP_CENTER = 4;
     const POSITION_TOP_LEFT = 5;
     const POSITION_TOP_RIGHT = 6;
-    const CODE_TYPE = 1;
     
     public function resize($src, $w, $h, $desc = null);
-    public function water($src,$pozition = slef::POSITION_BOTTOM_CENTER,$desc = null);
-    public function waterText($src,$position = self::POSITION_BOTTOM_RIGHT,$desc = null);
+    public function resizePadding($src, $w, $h, $desc = null);
+    public function water($src,$water,$pozition = slef::POSITION_BOTTOM_CENTER,$desc = null);
+    public function waterText($src,$text,$position = self::POSITION_BOTTOM_RIGHT,$desc = null);
     public function clip($src,$w,$h,$desc = null);
-    public function code($w,$h,$len,$type);
+    public function code($w,$h,$code);
 }
