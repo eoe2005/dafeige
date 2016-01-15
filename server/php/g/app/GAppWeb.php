@@ -1,10 +1,10 @@
 <?php
 
-namespace g\http;
+namespace g\app;
 
 /**
  * @author eoe2005@qq.com
  */
-class GWeb {
+class GAppWeb {
     
 }
