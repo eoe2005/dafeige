@@ -53,6 +53,7 @@ abstract class GApp {
         }else{
             throw new Exception('参数错误');
         }
+        return $this;
     }
     /**
      * 更具字符串解析路由

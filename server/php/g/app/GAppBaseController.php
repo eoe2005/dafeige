@@ -5,7 +5,7 @@ namespace g\app;
 /**
  * @author eoe2005@qq.com
  */
-class GAppController {
+class GAppBaseController {
     protected $input;
     public function __construct(g\app\GAppInput $input, g\conf\GConfInteface $confg) {
         $this->input = $input;
@@ -21,6 +21,4 @@ class GAppController {
     public function __call($name, $arguments) {
         $this->error404($name);
     }
-   
-    
 }

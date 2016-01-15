@@ -47,7 +47,7 @@ class GAppInput {
     public function server($k,$def = null){
         return $this->getDataByKey($_SERVER, $k, $def);
     }
-    public function parameter($k,$def = null){
+    public function cmd($k,$def = null){
         $arg = getopt('',["{$k}:"]);
         if(isset($arg[$k])){
             return htmlspecialchars($arg[$k]);
