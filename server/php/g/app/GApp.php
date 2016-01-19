@@ -54,7 +54,11 @@ abstract class GApp {
     public function __clone() {
         throw new Exception('对象禁止复制');
     }
-    
+    /**
+     * 
+     * @param type $name
+     * @return \g\db\GDBPdo
+     */
     public function getDB($name = 'default'){
         $key = 'db.'.$name;
         if(isset($this->obsCache[$key]) === FALSE){
@@ -75,6 +79,11 @@ abstract class GApp {
         }
         return $this->obsCache[$key];
     }
+    /**
+     * 
+     * @param type $name
+     * @return \g\cache\GCacheInterface
+     */
     public function getCache($name = 'default'){
         $key = 'cache.'.$name;
         if(isset($this->obsCache[$key]) === FALSE){

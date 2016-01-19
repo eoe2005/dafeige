@@ -85,7 +85,7 @@ class GDBPdo {
         }else{
             $sth->execute();
         }
-        return $sth->fetch(PDO::FETCH_ASSOC);
+        return $sth->fetch(\PDO::FETCH_ASSOC);
     }
     public function begin(){
         return $this->con->beginTransaction ();

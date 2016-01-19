@@ -43,7 +43,7 @@ class GAutoLoadClass {
 
     public static function loadClass($cls) {
         if ($cls == 'GLog') {
-            include G_DIR . 'g' . DS . 'log' . DS . 'GLog.php';
+            return include G_DIR . 'g' . DS . 'log' . DS . 'GLog.php';
         } else {
             $cls = preg_replace("/\\\/", DS, $cls);
             $file = G_DIR . $cls . '.php';
@@ -51,13 +51,15 @@ class GAutoLoadClass {
                 include $file;
             }else{
                 foreach (self::$_AUTOLOADPATH AS $path){
-                    $file = $path.$cls;
+                    $file = $path.$cls.'.php';
+                     //var_dump($cls,self::$_AUTOLOADPATH,$file);
                     if(file_exists($file)){
                         return include $file;
                     }
                 }
             }            
         }
+       
     }
 
 }
