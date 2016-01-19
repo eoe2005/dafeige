@@ -5,7 +5,7 @@ namespace g\app;
 /**
  * @author eoe2005@qq.com
  */
-class GAppBaseController {
+class GAppController {
     protected $input;
     public function __construct(g\app\GAppInput $input, g\conf\GConfInteface $confg) {
         $this->input = $input;

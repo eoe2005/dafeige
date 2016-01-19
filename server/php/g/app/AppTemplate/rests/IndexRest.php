@@ -3,8 +3,8 @@
 /**
  * @author eoe2005@qq.com
  */
-class IndexRest extends g\app\GAppWebRestController{
-    public function index(){
+class IndexController extends g\app\GAppController{
+    public function indexAction(){
         
     }
 }

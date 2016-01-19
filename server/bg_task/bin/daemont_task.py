@@ -43,11 +43,13 @@ class Tasks:
                             rumtime = conf.getint(task,'runtime')
                             lasttime = db.fetchTaskLastTime(task)
                             if time.time() - rumtime >= lasttime:
-                                print cmd,args
-                                if os.fork() == 0:
+                                pid = os.fork()
+                                if pid == 0:
                                     args.insert(0,cmd)
                                     os.execv(cmd,args)
                                 #os.spawnl(os.P_NOWAIT,cmd,args)
+                                else:
+                                    os.waitpid(pid,0)
                                 db.setTaskTime(task)
                             else:
                                 pass #print '不用执行'

@@ -1,17 +1,20 @@
 <?php
+
 namespace g\app;
+
 /**
  * @author eoe2005@qq.com
  */
-class GAppConsole extends GApp{
+class GAppConsole extends GApp {
+
     protected function beforeRun() {
-        $this->controllerSubfix = 'Console';
-        $this->actionSubfix = 'Cmd';
+        $this->controllerSubfix = 'Controller';
+        $this->actionSubfix = 'Action';
         $this->controllerDir = 'consoles';
         $argv = $_SERVER['argv'];
-        if(isset($argv[1])){
+        if (isset($argv[1])) {
             $this->routeByStr();
-        }else{
+        } else {
             $this->error404();
         }
     }

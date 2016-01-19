@@ -6,11 +6,7 @@ namespace g\app;
  * @author eoe2005@qq.com
  */
 class GAppWeb extends GApp {
-    protected function beforeRun() {
-        $this->controllerSubfix = 'Controller';
-        $this->actionSubfix = 'Action';
-        $this->controllerDir = 'controllers';
-        $argv = $_SERVER['argv'];
+    protected function beforeRun() {        
         $this->routeByStr($_GET['_action_']);
     }
 

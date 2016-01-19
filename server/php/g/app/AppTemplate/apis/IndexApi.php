@@ -3,9 +3,8 @@
 /**
  * @author eoe2005@qq.com
  */
-class IndexApi extends g\app\GAppWebApiController {
-    public function index(){
+class IndexController extends g\app\GAppController{
+    public function indexAction(){
         
     }
-    
 }

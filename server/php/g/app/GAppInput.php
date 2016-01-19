@@ -7,6 +7,11 @@ namespace g\app;
  * @author eoe2005@qq.com
  */
 class GAppInput {
+    /**
+     * API提交的数据
+     * @var type 
+     */
+    protected $apiData = [];
     public function __construct() {
         $_GET = $this->dataEncode($_GET);
         $_POST = $this->dataEncode($_POST);
@@ -53,5 +58,19 @@ class GAppInput {
             return htmlspecialchars($arg[$k]);
         }
         return $def;
+    }
+    /**
+     * 注册API的数据
+     * @param \g\app\callable $func
+     */
+    public function registerApiFunction(callable $func){
+        $data = file_get_contents('php://input');
+        $this->apiData = $this->dataEncode($func($data));
+    }
+    public function api($k,$def = null){
+        if(isset($this->apiData[$k])){
+            return $this->apiData[$k];
+        }
+        return null;
     }
 }
