@@ -11,20 +11,13 @@ class GConfIni extends GConfInteface {
         if (file_exists($file)) {
             $data = parse_ini_file($file, TRUE);
             $this->setData($data);
-            var_dump($this->data);
         } else {
             throw new \g\exception\GException($file . '配置文件不存在!');
         }
     }
 
     protected function setData($data) {
-        foreach ($data AS $k => $v) {
-            if (is_array($v)) {
-                $this->data[$k] = $this->setDataByArray($v);
-            } else {
-                $this->data[$k] = $v;
-            }
-        }
+        $this->data = $this->setDataByArray($data);       
     }
 
     protected function setDataByArray($data) {

@@ -12,12 +12,13 @@ class GDBPdo {
      */
     protected $con;
     private function __construct($dsn,$username = null,$password = null,$options = null) {
-        $this->con = new \PDO($dsn, $username, $passwd, $options);
+        //var_dump($dsn, $username, $password);
+        $this->con = new \PDO($dsn, $username, $password,$options);
     }
     public static function ins($dsn,$username = null,$password = null,$options = null){
-        $key = md5($dsn.$username,$password,$options);
+        $key = md5($dsn.$username.$password.$options);
         if(isset(self::$_pdos[$key]) === false){
-            self::$_pdos[$key] = new Gdb($dsn, $username, $password,$options);
+            self::$_pdos[$key] = new GDBPdo($dsn, $username, $password,$options);
         }
         return self::$_pdos[$key];
     }

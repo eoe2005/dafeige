@@ -5,7 +5,7 @@
  * 	@date: 2016/1/11
  * 	@Descript: 自动加载相关的数据
  */
-define('DS', DIRECTORY_SEPARATOR);
+defined('DS') || define('DS', DIRECTORY_SEPARATOR);
 define("G_DIR", realpath(dirname(__FILE__)) . DS);
 
 /**

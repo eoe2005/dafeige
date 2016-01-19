@@ -5,7 +5,7 @@ namespace g\cache;
 /**
  * @author eoe2005@qq.com
  */
-class GCacheMemcache implements GCacheInterface {
+class GCacheMemcache implements \g\cache\GCacheInterface {
 
     protected $memcache;
     protected $master_hash = 'hash_';

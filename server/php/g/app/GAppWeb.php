@@ -7,11 +7,11 @@ namespace g\app;
  */
 class GAppWeb extends GApp {
     protected function beforeRun() {        
-        $this->routeByStr($_GET['_action_']);
+        $this->routeByStr($_GET['__action__']);
     }
 
     protected function error404() {
-        
+        echo "Error";
     }
 
 }

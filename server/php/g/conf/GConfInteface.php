@@ -7,9 +7,10 @@ class GConfInteface {
     protected $data = [];
     public function get($k,$def = null){
         $ks = explode('.', $k);
+        //var_dump($ks);
         $ret = $this->data;
         foreach($ks AS $key){
-            if(isset($ret[$k])){
+            if(isset($ret[$key])){
                 $ret = $ret[$key];
             }else{
                 return $def;

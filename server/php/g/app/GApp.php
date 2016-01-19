@@ -7,13 +7,13 @@ namespace g\app;
  * @author eoe2005@qq.com
  */
 abstract class GApp {
-    const REQ_TYPE_WEB = 1;
-    const REQ_TYPE_API = 2;
-    const REQ_TYPE_ADMIN = 3;
-    const REQ_TYPE_REST = 4;
-    const REQ_TYPE_CONSOLE = 5;
+    const REQ_TYPE_WEB = 'web';
+    const REQ_TYPE_API = 'api';
+    const REQ_TYPE_ADMIN = 'admin';
+    const REQ_TYPE_REST = 'rest';
+    const REQ_TYPE_CONSOLE = 'consoles';
     
-    protected $req_type;
+    protected $req_type = 'web';
 
     protected $controllerName = 'Index';
     protected $controllerSubfix = 'Controller';
@@ -23,13 +23,16 @@ abstract class GApp {
     protected $restRoutePath = 'rests';
     protected $adminRoutePath = 'admins';
     protected $consoleRoutePath = 'consoles';
-    
+
+
     protected $input;
     protected $apiFunc = null;
     protected $controllerDir = 'controllers';
     protected static $app = false;
     protected $appDir = '';
     protected $appConf;
+    
+    protected $obsCache = [];
 
     /**
      * 
@@ -45,14 +48,44 @@ abstract class GApp {
 
     private function __construct() {
         $this->appDir = dirname($_SERVER["DOCUMENT_ROOT"]) . DS;
-        \GAutoLoadClass::addPaths($this->appDir . 'models' . DS);
         $this->input = new GAppInput();
     }
 
     public function __clone() {
         throw new Exception('对象禁止复制');
     }
-
+    
+    public function getDB($name = 'default'){
+        $key = 'db.'.$name;
+        if(isset($this->obsCache[$key]) === FALSE){
+            $conf = $this->appConf->getArray($key);
+            //var_dump($conf,$key);
+            $dsn = $conf['type'].":";            
+            $username = $conf['username'];
+            $password = $conf['password'];
+            unset($conf['password']);
+            unset($conf['username']);
+            unset($conf['type']);
+            $d = [];
+            foreach ($conf AS $k=>$v){
+                $d[] = sprintf('%s=%s',$k,$v);
+            }
+            $dsn .= implode(';', $d);
+            $this->obsCache[$key] = \g\db\GDBPdo::ins($dsn, $username, $password);
+        }
+        return $this->obsCache[$key];
+    }
+    public function getCache($name = 'default'){
+        $key = 'cache.'.$name;
+        if(isset($this->obsCache[$key]) === FALSE){
+            $conf = $this->appConf->getArray($key);
+            $dns = $conf['type']."://";
+            unset($conf['type']);
+            $dns .= http_build_query($conf);
+            $this->obsCache[$key] = \g\cache\GCache::ins($dns);
+        }
+        return $this->obsCache[$key];
+    }
     /**
      * 加载配置文件
      * @param type $confname
@@ -63,6 +96,17 @@ abstract class GApp {
         if ($index) {
             $ext = substr($confname, $index + 1);
             $this->appConf = \g\conf\GConf::ins(sprintf('%s://%s%s%s%s', $ext, $this->appDir, 'conf', DS, $confname));
+            $autoload = $this->appConf->get('web.autoloadclass.path',null);
+            if($autoload){
+                $list = explode(',', $autoload);
+                foreach($list AS $path){
+                    \GAutoLoadClass::addPaths($this->appDir.$path);
+                }
+            }
+            $adminpath = $this->appConf->get('web.admin.prefix',null);
+            if($adminpath){
+                $this->routeAdmin($adminpath);
+            }
         } else {
             throw new Exception('参数错误');
         }
@@ -139,7 +183,8 @@ abstract class GApp {
             if ($this->apiFunc) {
                 $this->input->registerApiFunction($this->apiFunc);
             }
-            $obj = new $cls($this->input, $this->appConf);
+            //var_dump($this->input);
+            $obj = new $cls($this->input, $this->appConf,$this->appDir,$this->controllerName,$this->actionName,$this->req_type);
             $mothedName = $this->actionName . $this->actionSubfix;
             if (method_exists($obj, $mothedName)) {
                 call_user_func_array([$obj, $mothedName], []);
