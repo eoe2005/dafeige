@@ -12,6 +12,7 @@ class GAppWeb extends GApp {
 
     protected function error404() {
         echo "Error";
+        //var_dump($this);
     }
 
 }

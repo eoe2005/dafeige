@@ -18,6 +18,7 @@ class GPicGD implements GPicInterface {
     public function clip($src, $w, $h, $desc = null) {
         $info = $this->imgInfo($src);
         $out = imagecreatetruecolor($w, $h);
+        $back = imagecolorallocatealpha($out, 255, 255, 255, 0);
         imagefilledrectangle($out, 0, 0, $w, $h, $back);
         $x = 0;
         $y = 0;
@@ -45,6 +46,7 @@ class GPicGD implements GPicInterface {
     }
 
     public function code($width, $height, $code) {
+        //ob_start();
         $img = imagecreatetruecolor($width, $height);
         $fontname = dirname(__FILE__) . DS . 'fangsong.ttf';
         //imagelayereffect($img, IMG_EFFECT_OVERLAY);
@@ -60,10 +62,11 @@ class GPicGD implements GPicInterface {
 
         $x = ($width - $box[0]) / 2;
         $y = ($height) / 2 + $box[1] / 2 - 5; // - ($height - $box[1])/2;
-        //var_dump($box,$x,$y);
+        //var_dump($img, $fsize, 0, $x, $y, $fontcolor, $fontname, $code);
         imagefttext($img, $fsize, 0, $x, $y, $fontcolor, $fontname, $code);
-        //header("Content-type: image/png");
-        imagepng($img, 'test.png');
+        //ob_end_clean();
+        header("Content-type: image/png");
+        imagepng($img);
         imagedestroy($img);
     }
 
@@ -239,16 +242,17 @@ class GPicGD implements GPicInterface {
         }
         $ret = ['w' => $info[0], 'h' => $info[1]];
         switch ($info[2]) {
-            case IMG_PNG:
+            case 3:
                 $ret['res'] = imagecreatefrompng($src);
                 break;
-            case IMG_GIF:
+            case 1:
                 $ret['res'] = imagecreatefromgif($src);
                 break;
-            case IMG_JPEG:
+            case 2:
                 $ret['res'] = imagecreatefromjpeg($src);
                 break;
             default :
+                //var_dump($info);
                 throw new \g\exception\GException($src . "不是支持的图片");
                 ;
         }

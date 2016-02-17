@@ -73,4 +73,11 @@ class GAppInput {
         }
         return null;
     }
+    
+    public function isPost(){
+        return $_SERVER["REQUEST_METHOD"] == 'POST';
+    }
+    public function ref(){
+        return $_SERVER["HTTP_REFERER"];
+    }
 }

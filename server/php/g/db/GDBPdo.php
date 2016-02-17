@@ -27,14 +27,16 @@ class GDBPdo {
         foreach ($data AS $k => $v){
             $args[':'.$k] = $v;
         }
-        $sth = $this->con->prepare(sprintf("INSERT INTO %s(%s) VALUES(%s)",$table,  implode(',', array_keys($data),  implode(',', array_keys($args)))));
+        $sql = sprintf("INSERT INTO %s(%s) VALUES(%s)",$table,  implode(',', array_keys($data)),  implode(',', array_keys($args)));
+        //echo $sql;
+        $sth = $this->con->prepare($sql);
         $sth->execute($args);
         return $this->con->lastInsertId();
     }
     public function update($table,$data,$where = null){
         $args = [];
         $set = [];
-        foreach ($data AS $k->$v){
+        foreach ($data AS $k=>$v){
             $args[':'.$k] = $v;
             $set[] = sprintf("%s=:%s",$k,$k);
         }
@@ -74,7 +76,7 @@ class GDBPdo {
         }else{
             $sth->execute();
         }
-        return $sth->fetchAll(PDO::FETCH_ASSOC);
+        return $sth->fetchAll(\PDO::FETCH_ASSOC);
     }
     public function fetchOne($sql){
         $sth = $this->con->prepare($sql);

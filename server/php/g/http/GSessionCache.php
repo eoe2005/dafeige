@@ -6,7 +6,7 @@ namespace g\http;
 class GSessionCache implements \SessionHandlerInterface {
     protected $_cache;
     protected $_exprire;
-    public function __construct(g\cache\GCacheInterface $cache,$_exprire = 7200) {
+    public function __construct(\g\cache\GCacheInterface $cache,$_exprire = 7200) {
         $this->_cache = $cache;
         $this->_exprire = $_exprire;
     }
@@ -32,6 +32,7 @@ class GSessionCache implements \SessionHandlerInterface {
     }
 
     public function write($session_id, $session_data) {
+        //var_dump($session_id, $session_data,$this->_exprire);
         return $this->_cache->setExpire($session_id,$session_data,  $this->_exprire);
     }
 

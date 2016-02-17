@@ -116,6 +116,10 @@ abstract class GApp {
             if($adminpath){
                 $this->routeAdmin($adminpath);
             }
+            $session = $this->appConf->getArray('web.session',null);
+            if($session){
+                \g\http\GSession::ins($session);
+            }
         } else {
             throw new Exception('参数错误');
         }
@@ -187,6 +191,7 @@ abstract class GApp {
         $this->beforeRun();
         $cls = $this->controllerName . $this->controllerSubfix;
         $file = $this->appDir . $this->controllerDir . DS . $cls . '.php';
+        //echo $file;
         if (file_exists($file)) {
             include $file;
             if ($this->apiFunc) {
@@ -195,6 +200,7 @@ abstract class GApp {
             //var_dump($this->input);
             $obj = new $cls($this->input, $this->appConf,$this->appDir,$this->controllerName,$this->actionName,$this->req_type);
             $mothedName = $this->actionName . $this->actionSubfix;
+            
             if (method_exists($obj, $mothedName)) {
                 call_user_func_array([$obj, $mothedName], []);
                 die();
