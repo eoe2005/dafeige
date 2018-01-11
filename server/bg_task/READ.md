@@ -17,11 +17,11 @@
 	runtime=600  #任务多久执行一次，600 = 10分钟
 	args.gitpull=/data/git/bg_task 任务脚本接收到的参数 ，必须是 args开头，之后的是任意字符串，值为task接收的参数 
 	#删除昨天的日志文件
-	# 执行方式 /bin/RmOneDayFile /data/wwwroot/alios.api.teddymobile.cn/logs/debug /data/wwwroot/aliqd.api.teddymobile.cn/logs/debug
+	# 执行方式 /bin/RmOneDayFile /data/wwwroot/alios.api.*.cn/logs/debug /data/wwwroot/aliqd.api.*.cn/logs/debug
 	[RmOneDayFile]
 	runtime=86400
-	args.alios=/data/wwwroot/alios.api.teddymobile.cn/logs/debug
-	args.aliqd=/data/wwwroot/aliqd.api.teddymobile.cn/logs/debug
+	args.alios=/data/wwwroot/alios.api.*.cn/logs/debug
+	args.aliqd=/data/wwwroot/aliqd.api.*.cn/logs/debug
 	[ErrorPHP]
 	runtime=600
 	args.phpini=/usr/local/php/etc/php.ini
